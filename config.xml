@@ -1,14 +1,31 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>This job simply runs a shell script to clone one of two basic Jenkins jobs into Jenkin&apos;s jobs &#xd;
+directory to make it easier for you to add new WebObjects Jobs to Jenkins without needing to &#xd;
+use the command line. The jobs that this will create will need to be configured before they will&#xd;
+work, but you only really need to add the Repository URL and the name of the WOProject inside the&#xd;
+repository.&#xd;
+</description>
+  <logRotator>
+    <daysToKeep>-1</daysToKeep>
+    <numToKeep>-1</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>8</artifactNumToKeep>
+  </logRotator>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>JOB_NAME</name>
+          <description>The name you&apos;d like this job to be called in Jenkins</description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>JOB_TYPE</name>
-          <description></description>
+          <description>&lt;p&gt;A Job Type of &lt;b&gt;WebObjects Framework or Application&lt;b&gt; will clone a basic Jenkins job for building a WebObjects project. This is the choice you will usually select.&lt;/p&gt;
+&lt;p&gt;A Job Type of &lt;b&gt;Install WebObjects and ProjectWOnder&lt;/b&gt; will clone a job that will download and install WebObjects and clone, build and install Project Wonder. You shouldn&apos;t need to change anything about this job other than to possibly point it to your own Wonder repository if you have one.</description>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>WebObjects Framework or Application</string>
@@ -16,11 +33,16 @@
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>JOB_NAME</name>
-          <description>The name you&apos;d like this job to be called in Jenkins</description>
-          <defaultValue></defaultValue>
-        </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>REPOSITORY_TYPE</name>
+          <description>This is the type of repository the your WebObjects Framework or Application is stored in. This setting is only used if you&apos;ve selected a Job Type of &lt;b&gt;WebObjects Framework or Application&lt;b&gt;.</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>Git</string>
+              <string>SVN</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -35,7 +57,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>**</name>
+        <name>master</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <recursiveSubmodules>false</recursiveSubmodules>
@@ -48,13 +70,13 @@
     <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
     <gitTool>Default</gitTool>
     <submoduleCfg class="list"/>
-    <relativeTargetDir></relativeTargetDir>
+    <relativeTargetDir>WOJenkins</relativeTargetDir>
     <excludedRegions></excludedRegions>
     <excludedUsers></excludedUsers>
     <gitConfigName></gitConfigName>
     <gitConfigEmail></gitConfigEmail>
     <skipTag>false</skipTag>
-    <scmName></scmName>
+    <scmName>WOJenkins</scmName>
   </scm>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
@@ -64,7 +86,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>${WORKSPACE}/WOJenkins/Install/Jobs/cloneJobDefinition.sh</command>
+      <command>${WORKSPACE}/WOJenkins/Install/Jenkins/Jobs/cloneJobDefinition.sh</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
